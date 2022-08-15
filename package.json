@@ -1,0 +1,20 @@
+{
+  "name": "express-mesto-gha",
+  "version": "1.0.0",
+  "description": "сервер для проекта Mesto",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/olgalatkina/express-mesto-gha.git"
+  },
+  "keywords": [],
+  "author": "Olga Latkina",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/olgalatkina/express-mesto-gha/issues"
+  },
+  "homepage": "https://github.com/olgalatkina/express-mesto-gha#readme"
+}
