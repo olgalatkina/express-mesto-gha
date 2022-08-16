@@ -24,5 +24,5 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 });
 
 app.listen(PORT, () => {
-  console.log('OK');
+  console.log('All right');
 });
