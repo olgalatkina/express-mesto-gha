@@ -1,4 +1,4 @@
-const Card = require('../models/cards');
+const Card = require('../models/card');
 const { CodeSuccess, CodeError } = require('../constants');
 
 module.exports.createCard = (req, res) => {
@@ -8,7 +8,7 @@ module.exports.createCard = (req, res) => {
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.status(CodeSuccess.CREATED).send(card))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err) {
         return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
 
@@ -33,7 +33,7 @@ module.exports.deleteCard = (req, res) => {
       res.status(CodeSuccess.OK).send(card);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err) {
         return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
 
@@ -56,7 +56,7 @@ module.exports.likeCard = (req, res) => {
       res.status(CodeSuccess.OK).send(card);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err) {
         return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
 
@@ -79,7 +79,7 @@ module.exports.dislikeCard = (req, res) => {
       res.status(CodeSuccess.OK).send(card);
     })
     .catch((err) => {
-      if (err.name === 'ValidationError') {
+      if (err) {
         return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
 
