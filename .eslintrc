@@ -1,4 +1,13 @@
 {
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "paths": [
+          "src"
+        ]
+      }
+    }
+  },
   "rules": {
     "no-console": "off",
     "@typescript-eslint/no-var-requires": 0
