@@ -2,16 +2,14 @@ const Card = require('../models/card');
 const { CodeSuccess, CodeError } = require('../constants');
 
 module.exports.createCard = (req, res) => {
-  console.log('createCard user._id: ', req.user._id);
   const { name, link } = req.body;
 
   Card.create({ name, link, owner: req.user._id })
     .then((card) => res.status(CodeSuccess.CREATED).send(card))
     .catch((err) => {
-      if (err) {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
         return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
-
       return res.status(CodeError.SERVER_ERROR).send({ message: err.message });
     });
 };
@@ -29,14 +27,12 @@ module.exports.deleteCard = (req, res) => {
         res.status(CodeError.NOT_FOUND).send({ message: 'Карточка не найдена' });
         return;
       }
-
       res.status(CodeSuccess.OK).send(card);
     })
     .catch((err) => {
       if (err) {
         return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
-
       return res.status(CodeError.SERVER_ERROR).send({ message: err.message });
     });
 };
@@ -52,14 +48,12 @@ module.exports.likeCard = (req, res) => {
         res.status(CodeError.NOT_FOUND).send({ message: 'Карточка не найдена' });
         return;
       }
-
       res.status(CodeSuccess.OK).send(card);
     })
     .catch((err) => {
       if (err) {
         return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
-
       return res.status(CodeError.SERVER_ERROR).send({ message: err.message });
     });
 };
@@ -75,14 +69,12 @@ module.exports.dislikeCard = (req, res) => {
         res.status(CodeError.NOT_FOUND).send({ message: 'Карточка не найдена' });
         return;
       }
-
       res.status(CodeSuccess.OK).send(card);
     })
     .catch((err) => {
       if (err) {
         return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
-
       return res.status(CodeError.SERVER_ERROR).send({ message: err.message });
     });
 };
