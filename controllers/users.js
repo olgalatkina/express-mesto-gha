@@ -31,7 +31,12 @@ module.exports.getUser = (req, res) => {
       }
       res.status(CodeSuccess.OK).send(user);
     })
-    .catch((err) => res.status(CodeError.SERVER_ERROR).send({ message: err.message }));
+    .catch((err) => {
+      if (err.name === 'CastError' || err.name === 'ValidationError') {
+        return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
+      }
+      return res.status(CodeError.SERVER_ERROR).send({ message: err.message });
+    });
 };
 
 module.exports.updateUser = (req, res) => {
