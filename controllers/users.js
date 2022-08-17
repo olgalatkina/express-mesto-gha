@@ -56,10 +56,9 @@ module.exports.updateUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
-        return;
+        return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
-      res.status(CodeError.SERVER_ERROR).send({ message: err.message });
+      return res.status(CodeError.SERVER_ERROR).send({ message: err.message });
     });
 };
 
@@ -80,9 +79,8 @@ module.exports.updateAvatar = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {
-        res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
-        return;
+        return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
-      res.status(CodeError.SERVER_ERROR).send({ message: err.message });
+      return res.status(CodeError.SERVER_ERROR).send({ message: err.message });
     });
 };
