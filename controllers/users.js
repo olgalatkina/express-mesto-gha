@@ -1,12 +1,18 @@
+const bcrypt = require('bcryptjs');
 const User = require('../models/user');
 const { CodeSuccess, CodeError } = require('../constants');
+const SALT_ROUNDS = 10;
 
 module.exports.createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
+  const { name, about, avatar, password, email } = req.body;
 
-  User.create({ name, about, avatar })
+  bcrypt.hash(password, SALT_ROUNDS)
+    .then((hash) => User.create({ name, about, avatar, password: hash, email }))
     .then((user) => res.status(CodeSuccess.CREATED).send(user))
     .catch((err) => {
+      if (err.code === 11000) {
+        return res.status(CodeError.ALREADY_EXISTS).send({ message: 'Такой пользователь уже существует' });
+      }
       if (err.name === 'ValidationError') {
         return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
@@ -26,8 +32,7 @@ module.exports.getUser = (req, res) => {
   User.findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(CodeError.NOT_FOUND).send({ message: 'Пользователь не найден' });
-        return;
+        return res.status(CodeError.NOT_FOUND).send({ message: 'Пользователь не найден' });
       }
       res.status(CodeSuccess.OK).send(user);
     })
@@ -49,8 +54,7 @@ module.exports.updateUser = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(CodeError.NOT_FOUND).send({ message: 'Пользователь не найден' });
-        return;
+        return res.status(CodeError.NOT_FOUND).send({ message: 'Пользователь не найден' });
       }
       res.status(CodeSuccess.OK).send(user);
     })
@@ -72,10 +76,9 @@ module.exports.updateAvatar = (req, res) => {
   )
     .then((user) => {
       if (!user) {
-        res.status(CodeError.NOT_FOUND).send({ message: 'Пользователь не найден' });
-        return;
+        return res.status(CodeError.NOT_FOUND).send({ message: 'Пользователь не найден' });
       }
-      res.status(CodeSuccess.OK).send(user);
+      return res.status(CodeSuccess.OK).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError' || err.name === 'ValidationError') {

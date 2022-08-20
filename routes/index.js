@@ -3,10 +3,6 @@ const userRouter = require('./users');
 const cardRouter = require('./cards');
 const { CodeError } = require('../constants');
 
-router.get('/', (req, res) => {
-  res.send('💌');
-});
-
 router.use('/users', userRouter);
 router.use('/cards', cardRouter);
 
