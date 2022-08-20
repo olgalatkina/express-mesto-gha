@@ -29,7 +29,7 @@ mongoose.connect(LOCALHOST, {
 });
 
 app.use(router);
-router.use(errors());
+app.use(errors()); // router.use(errors());
 app.use(handleErrors);
 
 app.listen(PORT, () => {
