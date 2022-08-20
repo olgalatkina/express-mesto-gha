@@ -1,14 +1,22 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { CodeSuccess, CodeError } = require('../constants');
 const SALT_ROUNDS = 10;
+const JWT_SECRET = 'some-secret-key'; // добавить в .env
 
 module.exports.createUser = (req, res) => {
   const { name, about, avatar, password, email } = req.body;
 
   bcrypt.hash(password, SALT_ROUNDS)
     .then((hash) => User.create({ name, about, avatar, password: hash, email }))
-    .then((user) => res.status(CodeSuccess.CREATED).send(user))
+    .then((user) => res.status(CodeSuccess.CREATED).send({
+      name: user.name,
+      about: user.about,
+      avatar: user.avatar,
+      _id: user._id,
+      email: user.email,
+    }))
     .catch((err) => {
       if (err.code === 11000) {
         return res.status(CodeError.ALREADY_EXISTS).send({ message: 'Такой пользователь уже существует' });
@@ -85,5 +93,18 @@ module.exports.updateAvatar = (req, res) => {
         return res.status(CodeError.BAD_REQUEST).send({ message: 'Переданы некорректные данные' });
       }
       return res.status(CodeError.SERVER_ERROR).send({ message: err.message });
+    });
+};
+
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: '7d' });
+      res.send({ token });
+    })
+    .catch(() => {
+       return res.status(CodeError.UNAUTHORIZED).send({ message: 'Неверный email или пароль' });
     });
 };
