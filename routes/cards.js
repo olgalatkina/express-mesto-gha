@@ -8,8 +8,6 @@ const {
   dislikeCard,
 } = require('../controllers/cards');
 
-router.get('/', getCards);
-
 router.post(
   '/',
   celebrate({
@@ -20,6 +18,8 @@ router.post(
   }),
   createCard,
 );
+
+router.get('/', getCards);
 
 router.delete(
   '/:cardId',
